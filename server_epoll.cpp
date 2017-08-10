@@ -14,9 +14,9 @@
 #include"server_epoll.h"
 using namespace std;
 
-epoll_class::epoll_class(int first_size)
+epoll_class::epoll_class()
 {
-    epollfd = server_epoll_create(first_size);
+    epollfd = server_epoll_create(5);
     now_listen_fds = 0;
     events = (struct epoll_event *)malloc(sizeof(struct epoll_event) * MAX_LISTEN_FD);
     memset(events,0,sizeof(struct epoll_event) * 1024);
@@ -43,6 +43,7 @@ bool epoll_class::server_delfd(int fd)
 {
     if(now_listen_fds <= 0) return false;
     epoll_ctl(epollfd,EPOLL_CTL_DEL,fd,0);
+    close(fd);
     now_listen_fds --;
 }
 

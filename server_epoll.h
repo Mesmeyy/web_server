@@ -11,7 +11,7 @@
 class epoll_class
 {
 public:
-    epoll_class(int first_size);
+    epoll_class();
     /*构造函数,创建epoll_class类的实例*/
     
     ~epoll_class();
@@ -27,6 +27,8 @@ public:
     /*更改epollfd所监听的fd套接字描述符的监听事件,ev是新监听的事件*/
     int server_epoll_wait();
     /*epoll_wait的封装函数,返回就绪的描述符个数*/
+    bool server_nonblocking(int fd);
+    /*把fd更改为非阻塞fd*/
 
 private:
     int server_epoll_create(int first_size);
@@ -34,9 +36,6 @@ private:
 
     bool server_epoll_kill();
     /*被析构函数调用,销毁epollfd*/
-
-    bool server_nonblocking(int fd);
-    /*把fd更改为非阻塞fd*/
 
 public:
     int epollfd;/*epoll_class核心变量,用来监听epoll事件的描述符*/
