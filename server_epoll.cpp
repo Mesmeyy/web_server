@@ -32,7 +32,7 @@ bool epoll_class::server_addfd(int fd)
     if(now_listen_fds >= (MAX_LISTEN_FD - 2)) return false;
     struct epoll_event event;
     event.data.fd = fd;
-    event.events = EPOLLIN | EPOLLET;
+    event.events = EPOLLIN|EPOLLET;
     epoll_ctl(epollfd,EPOLL_CTL_ADD,fd,&event);
     server_nonblocking(fd);
     
