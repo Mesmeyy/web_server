@@ -9,7 +9,7 @@
 #include"http_conn.h"
 #include"server_epoll.h"
 
-static epoll_class *m_epoll ;
+static epoll_class  *m_epoll ;
 static int m_usr_count  = 0 ;
 void removefd(int epollfd,int fd)
 {
@@ -265,8 +265,8 @@ http_conn::HTTP_CODE http_conn::parse_content(char* text)
 http_conn::HTTP_CODE http_conn:: do_request()
 {
     memset(m_real_file,0,1024);
-    strcpy(m_real_file,"/home/liangmengdi");
-    int len = strlen("/home/liangmengdi");
+    strcpy(m_real_file,"/home/zhuziyu/文档");
+    int len = strlen("/home/zhuziyu/文档");
     strncpy(m_real_file + len,m_url,FILENAME_LEN-len-1);
     int ret;
     if((ret = stat(m_real_file,&m_file_stat) )< 0)
@@ -542,23 +542,36 @@ http_conn::HTTP_CODE http_conn::process_read()
 
 void http_conn::process()
 {
-    read();
+    init(m_sockfd);
+    int ret_from_read = read();
+    if(ret_from_read == 0){
+        cout << "有一个用户下线了"<<endl;
+        m_epoll -> server_delfd(m_sockfd);
+        close(m_sockfd);
+        return ;
+    }
     HTTP_CODE read_ret = process_read();
+    cout << "\n\n\n本次所请求的文件名称是:" << m_real_file << endl;
     if(read_ret == NO_REQUEST)
     {
         m_epoll -> server_modfd(m_sockfd,EPOLLIN);
         return;
     }
     int write_ret = process_write(read_ret);
-    if(write_ret)
+    /*if(write_ret)
     {
         close_conn();
+    }*/
+    if(write_ret){
+        //如果出差错了的话,z这次发送就忽略,恢复监听epollin事件,监听下一次
+        m_epoll -> server_modfd(m_sockfd,EPOLLIN);
+       return ; 
     }
-    m_epoll -> server_modfd(m_sockfd,EPOLLOUT);
+    m_epoll ->server_modfd(m_sockfd,EPOLLOUT);
     write();
 
 }
-
+/*
 int main()
 {
 	
@@ -603,4 +616,4 @@ int main()
             else continue;
         }
     }
-}
+}*/

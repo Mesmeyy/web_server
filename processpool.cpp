@@ -13,13 +13,16 @@
 #include<string.h>
 #include"server_epoll.h"
 #include"processpool.h"
-#define SER_PORT 38001
+#define SER_PORT 38002
+//#include"exam.h"
+#include"http_conn.h"
 using namespace std;
 
 /*template <typename T>
 Processpool<T>* Processpool<T>::m_instance = NULL;
 static int sig_pipefd[2];
 */
+//static epoll_class this_epoll;
 static void exitout(int ret,string msg)
 {
     cout << msg << endl;
@@ -197,6 +200,7 @@ void Processpool<T>::run_parent()
                                     }
                                 }
                                 break;
+                                return ;
                             }
                             defalut:break;
                         }
@@ -214,6 +218,7 @@ void Processpool<T>:: run_child()
 {
     cout << "****  这是子进程 "<<m_idx << " 在运行  ****"<<endl;
     setup_sig_pipe();
+    static epoll_class &this_epoll = *epoll_object;
     int pipefd = m_sub_process[m_idx].m_pipefd[1];
     epoll_object -> server_addfd(pipefd);
 
@@ -255,7 +260,7 @@ void Processpool<T>:: run_child()
                         fprintf(stderr,"255:%d    accept new connection",getpid());
                         fprintf(stderr,"\n256:      connfd = %d\n",connfd);
                         epoll_object -> server_addfd(connfd);
-                        users[connfd].init(epoll_object,connfd,&client_address);
+                        users[connfd].init(this_epoll,connfd,client_address);
                     }
                 }
             }
@@ -294,54 +299,8 @@ void Processpool<T>:: run_child()
     fprintf(stderr,"294:child %d is died\n",m_idx);
 }
 
-class exam
-{
-public:
-     static epoll_class *epoll_object;
-    struct sockaddr_in client_addr;
-    int sockfd;
-    
-    void init(epoll_class *epoll_ex,int sockfd,const sockaddr_in * clientaddr){
-       // epoll_object = new epoll_class;
-        //memcpy(epoll_object,&epoll_ex,sizeof(epoll_class));
-        epoll_object = epoll_ex;
-        this -> sockfd = sockfd;
-        client_addr = *clientaddr ;
-    }
-    void process()
-    {
-        while(1){
-            char readbuf[1024];
-            memset(readbuf,0,1024);
-            int ret = recv(sockfd,readbuf,1024,0);
-            if(ret < 0){
-                if(errno != EAGAIN){
-                    fprintf(stderr,"319:ret < 0 close\n");
-                    //continue;
-                    epoll_object -> server_delfd(sockfd);
-                }
-                break;
-            }
-            if(ret == 0){
-                fprintf(stderr,"326:ret = 0 close\n");
-                epoll_object->server_delfd(sockfd);
-                break;
-            }else{
 
-                fprintf(stderr,"331:sockfd %d :%s",sockfd,readbuf);
-                epoll_object -> server_modfd(sockfd,EPOLLOUT);
-                if(send(sockfd,(char*)"This is from server",32,0) < 0){
-                    perror("334:服务器发送消息失败");
-                    continue;;
-                 }
-                epoll_object -> server_modfd(sockfd,EPOLLIN);
-            }
-        }
-    }
-
-};
-
-epoll_class *exam::epoll_object  = NULL;
+epoll_class *epoll_object = NULL;
 int main(int argc,char*argv[])
 {
     struct sockaddr_in server_address;
@@ -353,7 +312,7 @@ int main(int argc,char*argv[])
     bind(sockfd,(struct sockaddr*)&server_address,sizeof(server_address));
     listen(sockfd,5);
     
-    Processpool<exam> *pool = Processpool<exam>::create(sockfd);
+    Processpool<http_conn > *pool = Processpool<http_conn>::create(sockfd);
     if(pool){
         cout << "358:创建进程池成功"<<endl;
         pool -> run();
