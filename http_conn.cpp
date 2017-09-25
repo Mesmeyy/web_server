@@ -107,6 +107,10 @@ int http_conn::read()
         m_read_idx += bytes_read;
     }
     m_read_idx =sizeof(m_read_buf);
+
+    cout << "============================"<<endl;
+    cout << "read函数接收到的m_read_buf是:\n"<< m_read_buf<<endl;
+    cout << "============================"<<endl<<endl<<endl;
     return 1;
 }
 /*检测一行是否完整*/
@@ -184,7 +188,7 @@ http_conn::HTTP_CODE http_conn::parse_request_line(char* text)
 
     *m_version++='\0';
     m_version +=strspn(m_version," \t");
-    if(strcasecmp(m_version,"HTTP/1.0") != 0)
+    if(strcasecmp(m_version,"HTTP/1.1") != 0)
     {       printf("4:BAD_REQUEST");
         return BAD_REQUEST;
     }
@@ -202,11 +206,20 @@ http_conn::HTTP_CODE http_conn::parse_request_line(char* text)
     m_check_state = CHECK_STATE_HEADER;
     //return NO_REQUEST;
 
+
     if(m_url[strlen(m_url) - 1] == '/'){
         strcat(m_url,"index.html");
     }else{
         ;
     }
+    cout << "---------"<<endl;
+    cout << "在parse_request_line函数中:解析到的参数是:"<<endl;
+    cout << "请求:m_method = " << m_method << endl;
+    cout << "url:m_url = " << m_url << endl;
+    cout << "http版本 m_version = " << m_version << endl;
+    cout << "---------"<<endl;
+
+
     return NO_REQUEST;
 }
 
@@ -492,13 +505,15 @@ http_conn::HTTP_CODE http_conn::process_read()
     char* text = 0;
     m_start_line = 0;
     while(((m_check_state == CHECK_STATE_CONNECT)&& (line_status == LINE_OK))||((line_status = parse_line()) == LINE_OK))
-    {        
+    {   
+        cout << "正在进程process"<<endl;
         text = get_line();
         m_start_line = m_checked_idx;
         switch(m_check_state)
         {
             case CHECK_STATE_REQUESTLINE:
             {
+                cout << "即将进入parse_request_line函数"<<endl;
                 ret = parse_request_line(text);
                 if(ret == BAD_REQUEST)
                 {

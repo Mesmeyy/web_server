@@ -13,7 +13,7 @@
 #include<string.h>
 #include"server_epoll.h"
 #include"processpool.h"
-#define SER_PORT 38002
+#define SER_PORT 38003
 //#include"exam.h"
 #include"http_conn.h"
 using namespace std;
@@ -289,6 +289,7 @@ void Processpool<T>:: run_child()
             }
             else if(epoll_object -> events[i].events & EPOLLIN){
                 /*正常树立用户请求*/
+                cout << "292:是正常的请求静态文件呢..."<<endl;
                 users[sockfd].process();//调用类的处理函数,里面包含读和注册写然后写并发送
             }
             else{
