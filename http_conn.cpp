@@ -96,6 +96,7 @@ int http_conn::read()
         {
             if(errno == EAGAIN || errno == EWOULDBLOCK)
             {
+                cout << "99"<<endl;
                 break;
             }
             return 0;
