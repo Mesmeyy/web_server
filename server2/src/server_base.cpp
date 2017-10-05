@@ -139,5 +139,13 @@ int server_base::get_base()
             return -1;
         }
     }
+    if(bind(listenfd,(struct sockaddr*)&server_addr,sizeof(struct sockaddr_in)) < 0){
+        cout << "绑定失败"<<endl;
+        return -1;
+    }
+    if(listen(listenfd,5) < 0){
+        cout << "监听失败"<<endl;
+        return -1;
+    }
     return 0;
 }
