@@ -1,0 +1,24 @@
+*** PRODUCT DESCRIPTION ***
+
+[]: 
+    start the server 
+[-V]:
+    search version
+[-v]: 
+    search version
+[-H]:
+    search help
+[-?]:
+    search help
+[-s]:
+    stop:
+        stop the server
+    quit:
+        stop the server
+    reload:
+        restart the server
+[-c]:
+    XXX.conf:
+        load the assign profile
+
+***         END         ***
