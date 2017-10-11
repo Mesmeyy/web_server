@@ -8,11 +8,35 @@
 #include<iostream>
 #include<stdlib.h>
 #include<unistd.h>
+#include<fstream>
+#include<string>
+#include<regex>
 #include"server_conf.h"
 using namespace std;
-int  get_agency_conf(server_conf** sc,char* a)
+int read_conf(server_conf*sc,char *a)
 {
-    *sc = (server_conf*)malloc(sizeof(server_conf));
+    ifstream ifm;
+    ifm.open(a);
+    if(!ifm.is_open()){
+        cout << "找不到 "<< a << "文件"<<endl;
+        return -1;
+    }
+    char *rbuf;
+    rbuf = (char*)malloc(512);
+    while(ifm.getline(rbuf,sizeof(rbuf))){
+        string  rsf = rbuf;
+        smatch resultstr;
+        regex sonstr("server:");
+        regex_match(rsf,resultstr,sonstr);
+        if(resultstr != "server:") return -1;
+        
+    }
+}
+int  get_agency_conf(server_conf** sc,char* conffilename)
+{
+    *sc = new server_conf ;
+    if (read_conf(*sc,conffilename) == -1);
+        return -1;
     return 0;
 }
 

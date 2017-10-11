@@ -14,8 +14,13 @@ using namespace std;
 int main(int argc,char*argv[])
 {
     server_base serobject;
-    server_conf *sc = NULL ;
-    para_judge(&sc,serobject,argc,argv);
+    server_conf *sc = NULL;
+    int ret = para_judge(&sc,serobject,argc,argv);/*判断参数*/
     if(sc == NULL) return 0;
     /*服务器配置完成*/
+    if(ret = 0){
+        //http();
+    }else{
+        //agency();
+    }
 }

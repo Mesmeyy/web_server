@@ -9,5 +9,5 @@
 #define _PARA_JUDGE_H
 #include"server_conf.h"
 #include"server_base.h"
-void  para_judge(server_conf** a,server_base& b,int argc,char*argv[]);
+int  para_judge(server_conf** a,server_base& b,int argc,char*argv[]);
 #endif
