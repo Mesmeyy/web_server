@@ -1,0 +1,81 @@
+/*************************************************************************
+	> File Name: server_processpool.cpp
+	> Author: 朱紫钰
+	> Mail: zhuziyu1157817544@gmail.com
+	> Created Time: 2017年08月07日 星期一 16时10分44秒
+ ************************************************************************/
+
+#include<iostream>
+#include<sys/types.h>
+#include<sys/socket.h>
+#include<signal.h>
+#include<unistd.h>
+#include<string.h>
+#include<assert.h>
+
+#include"server_processpool.h"
+using namespace std;
+template<typename T>
+processpool<T> * m_instance = NULL;
+static int sig_pipefd[2];
+
+/*信号处理函数*/
+static void sig_handler(int sig)
+{
+    int msg = sig;
+    send(sig_pipefd[1],(char*)&msg,1,0);
+    return ;
+}
+
+/*添加信号到监测集合*/
+static void add_signal(int sig,void (handler)(int),bool restart = true)
+{
+    struct sigaction sa;
+    memset(&sa,0,sizeof(sa));
+    cout << "add_signal这里没有段错误" << endl;
+    sa.sa_handler = handler;
+    if(restart){
+        sa.sa_flags |= SA_RESTART;
+    }
+    sigfillset(&sa.sa_mask);
+    assert(sigaction(sig,&sa,NULL) != -1);
+}
+
+/*实例化一个进程池*/
+template<typename T>
+processpool<T>::processpool(int listenfd,int process_number):m_listenfd(listenfd),m_process_number(process_number),m_idx(-1),m_stop(false)
+{
+    assert((process_number > 0) && (process_number <= MAX_PROCESS_NUMBER));
+    cout << "创建子进程中..."<<endl;
+    
+    /*产生m_process_number个子进程,m_sub_process[]数组管理这m_process_number个进程*/
+    m_sub_process = new process[m_process_number];
+
+    /*开始创建子进程*/
+    for(int i = 0;i < m_process_number;i++){
+        /*创建父子对应的,一对父子，一对交流管道*/
+        int ret = socketpair(PF_UNIX,SOCK_STREAM,0,m_sub_process[i].m_pipefd);
+        m_sub_process[i].m_pid = fork();
+        assert(m_sub_process[i].m_pid > 0);
+        if(m_sub_process[i].m_pid){
+            //当前是父进程
+            close(m_sub_process[i].m_pipefd[1]);//父进程关1用0
+        }else{
+            close(m_sub_process[i].m_pipefd[2]);//子进程关0用1
+            m_idx = i;
+            break;
+        }
+    }
+}
+template <typename T>
+static processpool<T>* processpool<T>::create(int listenfd,int process_number = 8)
+{
+    cout <<"服务器正在创建进程池"<<endl;
+    if(!m_instance)
+    {
+        m_instance = new processpool<T>(listenfd,process_number);
+    }
+    return m_instance;
+    cout << "线程池创建成功"<<endl;
+}
+
