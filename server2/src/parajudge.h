@@ -9,5 +9,5 @@
 #define _PARAJUDGE_H
 #include"server_base.h"
 
-int parajudge(int a,char **b,server_base & c);
+int parajudge(int a,char *b[],server_base & bs);
 #endif
