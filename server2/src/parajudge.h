@@ -8,6 +8,11 @@
 #ifndef _PARAJUDGE_H
 #define _PARAJUDGE_H
 #include"server_base.h"
-
+#include<string>
+using namespace std;
 int parajudge(int a,char *b[],server_base & bs);
+int make_server_base(server_base& bs,string filename);
+void version();
+void help();
+int test_conf(string filename);
 #endif

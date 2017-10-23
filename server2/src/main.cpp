@@ -22,6 +22,7 @@ int main(int argc,char *argv[])
     }
     
     switch(ret_para){
+        case -1:return 0;
         case Default_start: break;
         case Help:return 0;
         case Version:return 0;
