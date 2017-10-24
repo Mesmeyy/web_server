@@ -2,8 +2,6 @@
 
 []: 
     start the server 
-[-V]:
-    search version
 [-v]: 
     search version
 [-H]:

@@ -8,6 +8,7 @@
 #include<iostream>
 #include<string>
 #include<cstring>
+#include<fstream>
 #include"hong.h"
 #include"server_base.h"
 #include"parajudge.h"
@@ -21,11 +22,13 @@ int parajudge(int a,char*b[],server_base& bs)
         else return -1;
     }
     if(a == 2){
-        if(strcmp(b[1],"-v")) {
+        string V(b[1]);
+        string S(b[1]);
+        if(V == "-v") {
             version();
             return Version;
         }
-        else if(strcmp(b[1],"-s")) {
+        else if(S == "-s") {
             return Stop;
         }
         else if(strcmp(b[1],"-?")){
@@ -53,6 +56,34 @@ int parajudge(int a,char*b[],server_base& bs)
 }
 
 int make_server_base(server_base&bs,string filename){}
-void version(){}
-void help(){}
+void version(){
+    ifstream ifm;
+    char read_buf[32];
+    unsigned int buflen = sizeof(read_buf);
+    ifm.open("../conf/version.v",ios_base::in);
+    if(ifm.is_open()){
+        memset(read_buf,0,buflen);
+        while(ifm.getline(read_buf,buflen)){
+            cout << read_buf<<endl;
+        }
+    }else{
+        cout << "版本文件打开出错"<<endl;
+    }
+    return ;
+}
+void help(){
+    ifstream ifm;
+    char read_buf[32];
+    ifm.open("../conf/help.txt",ios_base::in);
+    unsigned int buflen = sizeof(read_buf);
+    if(ifm.is_open()){
+        memset(read_buf,0,buflen);
+        while(ifm.getline(read_buf,buflen)){
+            cout << read_buf<<endl;
+        }
+    }else{
+        cout << "帮助文件打开出错"<<endl;
+    }
+    return ;
+}
 int test_conf(string filename){}

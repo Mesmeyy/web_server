@@ -18,11 +18,11 @@ int main(int argc,char *argv[])
         case 1:
         case 2:
         case 3:ret_para = parajudge(argc,argv,bs);break;
-        default:return 0;
+        default:help();return 0;
     }
     
     switch(ret_para){
-        case -1:return 0;
+        case -1:help();return 0;
         case Default_start: break;
         case Help:return 0;
         case Version:return 0;
