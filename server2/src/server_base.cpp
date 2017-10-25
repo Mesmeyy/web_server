@@ -41,33 +41,33 @@ int server_base::start_server_base()
     struct passwd *pwd = NULL;
     pwd = getpwuid(getuid());
     string pwuser(pwd -> pw_name);
-    if(pwuser != user) return -1;
+    if(pwuser != user) return 0;
 
     //设定ip和端口
     if((sockfd = socket(AF_INET,SOCK_STREAM,0)) < 0){
         cout << "创建监听套接字失败"<<endl;
-        return -1;
+        return 0;
     }
     int optival = 1;
     if(setsockopt(sockfd,SOL_SOCKET,SO_REUSEADDR,(void*)&optival,sizeof(int)) < 0){
         cout << "设置套接字属性失败"<<endl;
-        return -1;
+        return 0;
     }
     memset(&address,0,sizeof(struct sockaddr_in));
     address.sin_family = AF_INET;
     address.sin_port = htons(listenport);
     if(inet_aton(listenip.c_str(),&address.sin_addr) == 0) {
         cout << "设置ip失败"<<endl;
-        return -1;
+        return 0;
     }
 
     if(bind(sockfd,(struct sockaddr*)&address,sizeof(struct sockaddr_in)) < 0){
         cout << "绑定套接字失败"<<endl;
-        return -1;
+        return 0;
     }
     if(listen(sockfd,Default_listen) < 0){
         cout << "监听失败"<<endl;
-        return -1;
+        return 0;
     }
     
     if(rootpath != ""){
@@ -75,7 +75,7 @@ int server_base::start_server_base()
         userrootpath = rootpath + server_name;   
         if(mkdir(userrootpath.c_str(),S_IRWXU|S_IRWXG) != 0){
             cout << "用户目录不正确或目录已经存在"<<endl;
-            return -1;
+            return 0;
         }
     }
     return sockfd;
