@@ -8,6 +8,7 @@
 #include<iostream>
 #include<netinet/in.h>
 #include<cstring>
+#include<sys/stat.h>
 #include<arpa/inet.h>
 #include<sys/types.h>
 #include<unistd.h>
@@ -70,8 +71,12 @@ int server_base::start_server_base()
     }
     
     if(rootpath != ""){
-        
+        if(server_name == "") server_name = "admin";
+        userrootpath = rootpath + server_name;   
+        if(mkdir(userrootpath.c_str(),S_IRWXU|S_IRWXG) != 0){
+            cout << "用户目录不正确或目录已经存在"<<endl;
+            return -1;
+        }
     }
-
     return sockfd;
 }
