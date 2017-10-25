@@ -9,6 +9,11 @@
 #define _SERVER_BASE_H
 /*这是有关服务器的基础信息*/
 #include <string>
+#include<netinet/in.h>
+#include<arpa/inet.h>
+#include<stdlib.h>
+#include<sys/socket.h>
+#include<sys/types.h>
 using namespace std;
 
 class server_base
@@ -20,8 +25,13 @@ public:
     int listenport;
     int workerprocess;
     string rootpath;
+    string userrootpath;
     int agent;
 
+
+   
+    struct sockaddr_in address;
+    int sockfd;
 public:
     server_base();
     ~server_base();
