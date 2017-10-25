@@ -25,6 +25,8 @@ int parajudge(int a,char*b[],server_base& bs)
     if(a == 2){
         string V(b[1]);
         string S(b[1]);
+        string H(b[1]);
+        string W(b[1]);
         if(V == "-v") {
             version();
             return Version;
@@ -32,11 +34,11 @@ int parajudge(int a,char*b[],server_base& bs)
         else if(S == "-s") {
             return Stop;
         }
-        else if(strcmp(b[1],"-?")){
+        else if(W == "-?"){
             help();
             return Help;
         }
-        else if(strcmp(b[1],"-h")){
+        else if(H == "-h"){
             help();
             return Help;
         }
@@ -45,11 +47,14 @@ int parajudge(int a,char*b[],server_base& bs)
         }
     }
     if(a == 3){
-        if(strcmp(b[1],"-t")){
+        string T(b[1]);
+        string C(b[1]);
+        if(T == "-t"){
             if(test_conf(b[2]) == 1) return Conf;
             else return -1;
         }
-        else if(strcmp(b[1],"-c")){
+        else if(C == "-c"){
+            cout << "新的配置文件"<< endl;
             if(make_server_base(bs,b[2]) == 1)return Conf_change;
             else return -1;
         }
@@ -122,6 +127,7 @@ int test_conf(string filename){
             if(read_conf(bs_temp,read_buf,flag) == 1) continue;
             else return -1;
         }
+        cout << filename << "文件配置正确"<<endl;
         return 1;
     }
     else{
@@ -133,34 +139,34 @@ int read_conf(server_base& bs,char* read_buf,int flag){
  
     register string temp = read_buf;
     if(temp.substr(0,5) == "user ") {
-        cout << "user right" << endl;
-        if(flag) bs.user =  temp.substr(6,strlen(read_buf) - 5); 
+        //cout << "user right" << endl;
+        if(flag) bs.user =  temp.substr(5,strlen(read_buf) - 5); 
         return 1;
     }
     if(temp.substr(0,9) == "listenip "){
-        cout << "listenip right" << endl; 
-        if(flag) bs.listenip = temp.substr(10,strlen(read_buf) - 9);
+        //cout << "listenip right" << endl; 
+        if(flag) bs.listenip = temp.substr(9,strlen(read_buf) - 9);
         return 1;
     }
     if(temp.substr(0,11) == "listenport "){
-        cout << "listenport right" << endl;
-        if(flag) bs.listenport = atoi(temp.substr(12,strlen(read_buf) -11 ).c_str());
+        //cout << "listenport right" << endl;
+        if(flag) bs.listenport = atoi(temp.substr(11,strlen(read_buf) -11 ).c_str());
         return 1;
     }
     if(temp.substr(0,14) == "workerprocess "){
-        cout << "workerprocess right" << endl;
-        if(flag) bs.workerprocess = atoi(temp.substr(15,strlen(read_buf) -14).c_str());
+        //cout << "workerprocess right" << endl;
+        if(flag) bs.workerprocess = atoi(temp.substr(14,strlen(read_buf) -14).c_str());
         return 1;
     }
     if(temp.substr(0,12) == "server_name "){
-        cout << "server_name right" << endl;
-        if(flag) bs.server_name = temp.substr(13,strlen(read_buf) - 12);
+        //cout << "server_name right" << endl;
+        if(flag) bs.server_name = temp.substr(12,strlen(read_buf) - 12);
         return 1;
     }
     if(temp.substr(0,9) == "rootpath "){
-        cout << "rootpath right" << endl;
+        //cout << "rootpath right" << endl;
         if(flag) {
-            bs.rootpath = temp.substr(10,strlen(read_buf) - 9);
+            bs.rootpath = temp.substr(9,strlen(read_buf) - 9);
             bs.agent = 1;
         }
         return 1;

@@ -25,6 +25,7 @@ public:
 public:
     server_base();
     ~server_base();
+    int start_server_base();
 };
 
 #endif

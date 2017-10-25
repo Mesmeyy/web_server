@@ -23,3 +23,5 @@ server_base::server_base()
 }
 
 server_base::~server_base(){}
+int server_base::start_server_base()
+{}
