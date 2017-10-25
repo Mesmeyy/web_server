@@ -17,6 +17,7 @@ server_base::server_base()
     listenip = "";
     listenport = -1;
     workerprocess = 1;
+    server_name = "";
     rootpath = "";
     agent = 0;
 }

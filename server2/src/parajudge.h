@@ -15,4 +15,5 @@ int make_server_base(server_base& bs,string filename);
 void version();
 void help();
 int test_conf(string filename);
+int read_conf(server_base& bs,char* read_buf,int flag = 1);
 #endif

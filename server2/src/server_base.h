@@ -16,6 +16,7 @@ class server_base
 public:
     string user;
     string listenip;
+    string server_name;
     int listenport;
     int workerprocess;
     string rootpath;

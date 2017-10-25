@@ -7,6 +7,7 @@
 
 #include<iostream>
 #include<string>
+#include<cstdlib>
 #include<cstring>
 #include<fstream>
 #include"hong.h"
@@ -55,7 +56,27 @@ int parajudge(int a,char*b[],server_base& bs)
     }
 }
 
-int make_server_base(server_base&bs,string filename){}
+int make_server_base(server_base& bs,string filename)
+{
+    string the_end_filename("../conf/");//这是默认路径
+    char read_buf[64];
+    ifstream ifm;
+    int flag = 1;
+
+    unsigned int buflen = sizeof(read_buf);
+    the_end_filename += filename;
+    ifm.open(the_end_filename.c_str());
+    if(ifm.is_open()){
+        while(ifm.getline(read_buf,buflen)){
+            if(read_conf(bs,read_buf,flag) == 1) continue;
+            else {
+                cout << "配置文件错误" <<endl;
+                return -1;
+            }
+        }
+        return 1;
+    }else  return -1;
+}
 void version(){
     ifstream ifm;
     char read_buf[32];
@@ -86,4 +107,63 @@ void help(){
     }
     return ;
 }
-int test_conf(string filename){}
+int test_conf(string filename){
+    server_base bs_temp;
+    string the_end_filename("../conf/");
+    ifstream ifm;
+    char read_buf[64];
+    int flag = 0;
+
+    unsigned int buflen = sizeof(read_buf);
+    the_end_filename += filename;
+    ifm.open(the_end_filename.c_str(),ios_base::in);
+    if(ifm.is_open()){
+        while(ifm.getline(read_buf,buflen)){
+            if(read_conf(bs_temp,read_buf,flag) == 1) continue;
+            else return -1;
+        }
+        return 1;
+    }
+    else{
+        cout << "配置文件打不开"<<endl;
+        return -1;
+    }
+}
+int read_conf(server_base& bs,char* read_buf,int flag){
+ 
+    register string temp = read_buf;
+    if(temp.substr(0,5) == "user ") {
+        cout << "user right" << endl;
+        if(flag) bs.user =  temp.substr(6,strlen(read_buf) - 5); 
+        return 1;
+    }
+    if(temp.substr(0,9) == "listenip "){
+        cout << "listenip right" << endl; 
+        if(flag) bs.listenip = temp.substr(10,strlen(read_buf) - 9);
+        return 1;
+    }
+    if(temp.substr(0,11) == "listenport "){
+        cout << "listenport right" << endl;
+        if(flag) bs.listenport = atoi(temp.substr(12,strlen(read_buf) -11 ).c_str());
+        return 1;
+    }
+    if(temp.substr(0,14) == "workerprocess "){
+        cout << "workerprocess right" << endl;
+        if(flag) bs.workerprocess = atoi(temp.substr(15,strlen(read_buf) -14).c_str());
+        return 1;
+    }
+    if(temp.substr(0,12) == "server_name "){
+        cout << "server_name right" << endl;
+        if(flag) bs.server_name = temp.substr(13,strlen(read_buf) - 12);
+        return 1;
+    }
+    if(temp.substr(0,9) == "rootpath "){
+        cout << "rootpath right" << endl;
+        if(flag) {
+            bs.rootpath = temp.substr(10,strlen(read_buf) - 9);
+            bs.agent = 1;
+        }
+        return 1;
+    }
+    return -1;
+}
