@@ -70,6 +70,11 @@ int server_base::start_server_base()
         return 0;
     }
     
+    if(agent == 1){
+        //是代理服务器
+        rootpath = "";
+    }
+
     if(rootpath != ""){
         if(server_name == "") server_name = "admin";
         userrootpath = rootpath + server_name;   
@@ -78,5 +83,8 @@ int server_base::start_server_base()
             return 0;
         }
     }
+    
+    //在hosts下增加和这一栏
+
     return sockfd;
 }

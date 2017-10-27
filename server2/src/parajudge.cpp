@@ -164,11 +164,13 @@ int read_conf(server_base& bs,char* read_buf,int flag){
         return 1;
     }
     if(temp.substr(0,9) == "rootpath "){
-        //cout << "rootpath right" << endl;
         if(flag) {
             bs.rootpath = temp.substr(9,strlen(read_buf) - 9);
-            bs.agent = 1;
         }
+        return 1;
+    }
+    if(temp.substr(0,5) == "agent"){
+        bs.agent = 1;
         return 1;
     }
     return -1;
