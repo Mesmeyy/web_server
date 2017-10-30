@@ -31,5 +31,8 @@ int main(int argc,char *argv[])
     }
     if(bs.start_server_base()){
         cout << "启动基础服务器成功"<< endl;
-    }else{return 0;}
+    }else{
+        cout << "服务器基础启动失败,程序中断..."<<endl;
+        return 0;
+    }
 }

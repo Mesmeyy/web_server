@@ -18,6 +18,7 @@ string default_conf;
 int parajudge(int a,char*b[],server_base& bs)
 {
     default_conf = "server.conf";
+    //cout << "parajudge.cpp 21: a = " << a<< endl;
     if(a == 1){
         if(make_server_base(bs,default_conf) == 1)return Default_start;
         else return -1;
@@ -68,6 +69,7 @@ int make_server_base(server_base& bs,string filename)
     ifstream ifm;
     int flag = 1;
 
+    bs.confname = filename;
     unsigned int buflen = sizeof(read_buf);
     the_end_filename += filename;
     ifm.open(the_end_filename.c_str());

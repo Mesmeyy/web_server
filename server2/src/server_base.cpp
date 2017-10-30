@@ -32,6 +32,7 @@ server_base::server_base()
     rootpath = "";
     agent = 0;
     sockfd = 0;
+    confname = "";
 }
 
 server_base::~server_base(){}
@@ -77,7 +78,8 @@ int server_base::start_server_base()
 
     if(rootpath != ""){
         if(server_name == "") server_name = "admin";
-        userrootpath = rootpath + server_name;   
+        userrootpath = rootpath + server_name;
+        //cout << "server_base.cpp:82 userrootpath = " << userrootpath << endl;
         if(mkdir(userrootpath.c_str(),S_IRWXU|S_IRWXG) != 0){
             cout << "用户目录不正确或目录已经存在"<<endl;
             return 0;
