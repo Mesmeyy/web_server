@@ -35,4 +35,6 @@ int main(int argc,char *argv[])
         cout << "服务器基础启动失败,程序中断..."<<endl;
         return 0;
     }
+
+    cout << bs.confname << "--------------"<<endl;
 }

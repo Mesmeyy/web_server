@@ -28,7 +28,7 @@ public:
     string userrootpath;
     int agent;
     string confname;
-
+    hash server hash;
    
     struct sockaddr_in address;
     int sockfd;

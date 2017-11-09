@@ -67,7 +67,7 @@ int make_server_base(server_base& bs,string filename)
     string the_end_filename("../conf/");//这是默认路径
     char read_buf[64];
     ifstream ifm;
-    int flag = 1;
+    int flag = 1;//是监测还是真正的执行
 
     bs.confname = filename;
     unsigned int buflen = sizeof(read_buf);
@@ -88,7 +88,7 @@ void version(){
     ifstream ifm;
     char read_buf[32];
     unsigned int buflen = sizeof(read_buf);
-    ifm.open("../conf/version.v",ios_base::in);
+    ifm.open("../attr/version.v",ios_base::in);
     if(ifm.is_open()){
         memset(read_buf,0,buflen);
         while(ifm.getline(read_buf,buflen)){
@@ -102,7 +102,7 @@ void version(){
 void help(){
     ifstream ifm;
     char read_buf[32];
-    ifm.open("../conf/help.txt",ios_base::in);
+    ifm.open("../attr/help.txt",ios_base::in);
     unsigned int buflen = sizeof(read_buf);
     if(ifm.is_open()){
         memset(read_buf,0,buflen);
@@ -167,7 +167,7 @@ int read_conf(server_base& bs,char* read_buf,int flag){
     }
     if(temp.substr(0,9) == "rootpath "){
         if(flag) {
-            bs.rootpath = temp.substr(9,strlen(read_buf) - 9);
+            bs.rootpath= temp.substr(9,strlen(read_buf) - 9);
         }
         return 1;
     }
@@ -175,5 +175,18 @@ int read_conf(server_base& bs,char* read_buf,int flag){
         bs.agent = 1;
         return 1;
     }
+    if(temp.substr(0,8) == "include "){
+        if(flag) {
+            if(flag)//读文件正确就返回1
+            return 1;
+            else  return -1;
+        }
+        return 1;
+    }
+    if(temp.substr(0,7) == "server "){
+        //读ip,执行hash
+        return 1;
+    }
+
     return -1;
 }

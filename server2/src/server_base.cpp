@@ -80,13 +80,12 @@ int server_base::start_server_base()
         if(server_name == "") server_name = "admin";
         userrootpath = rootpath + server_name;
         //cout << "server_base.cpp:82 userrootpath = " << userrootpath << endl;
-        if(mkdir(userrootpath.c_str(),S_IRWXU|S_IRWXG) != 0){
-            cout << "用户目录不正确或目录已经存在"<<endl;
-            return 0;
-        }
+        mkdir(userrootpath.c_str(),S_IRWXU|S_IRWXG) ;
     }
     
     //在hosts下增加和这一栏
-
+    //cout << "root"<<endl;
+    //不进行这个功能
+    //system("su");
     return sockfd;
 }
