@@ -28,7 +28,7 @@ public:
     string userrootpath;
     int agent;
     string confname;
-    hash server hash;
+    fzjh servers;//负责负载均衡的总类
    
     struct sockaddr_in address;
     int sockfd;

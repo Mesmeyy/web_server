@@ -184,7 +184,8 @@ int read_conf(server_base& bs,char* read_buf,int flag){
         return 1;
     }
     if(temp.substr(0,7) == "server "){
-        //读ip,执行hash
+        //填充所管理的ip们
+
         return 1;
     }
 
