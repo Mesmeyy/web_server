@@ -14,6 +14,7 @@ typedef struct
     int now_weight;
     ip_home *next;
     int att ;//当前服务器是否可用 ,0不可用1可用
+    void * endpoint;//用作结尾标识符,为以后的hash作
 }ip_home;
 
 class fzjh
@@ -23,20 +24,13 @@ private:
     ip_home *home_use_end;//当前服役的服务器尾巴
     ip_home *home_now;//当前该选它作为负载均衡的服务器
     ip_home *homw_lazy;//目前gg服务器
+    ip_home **buckets;//为以后ip hash用
     int ip_number;//ip数量
     int ip_ok_number;
     int ip_bad_number;
     int over;//是否轮寻完一圈,1轮寻完一圈，要重置了,0没有轮寻完一圈
 public:
-    fzjh();//初始化的构造函数
-        /*home_use = NULL;
-        *home_now = NULL;
-        *homw_lazy = NULL;
-        ip_number = 0;
-        ip_ok_number = 0;
-        ip_bad_number = 0;
-        over = 1;
-        */
+    fzjh();//构造函数
     int addip(string &ip,int &weight);//添加新的ip
     int delip(string &ip,int &weight);//删除旧的ip
     int reset();//重置ip队列
@@ -47,8 +41,7 @@ public:
     int get_ok_ip_number();//获取可用ip数量
     int get_ip_number();//获取总ip数量
     int get_bad_ip_number();//获取不可用ip数量
+    int ip_weight_hash();//进行ip到weight的哈希
     int set_ip_attr();//本质上用hash比较好
-    
-
 };
 #endif
