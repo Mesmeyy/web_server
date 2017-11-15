@@ -11,7 +11,75 @@
 using namespace std;
 using std::string;
 
+ip_homes::ip_homes()//ip_homes的构造函数
+{
+    
+}
 
+ip_homes::~ip_homes()//ip_homes的析构函数
+{
+    
+}
+
+bool ip_homes::set_ip(string ip)//设置ip
+{
+    
+}
+string& ip_homes::get_ip() const
+//得到ip对应的ip
+{
+    
+}
+
+bool ip_homes::set_weight();//设置权重
+{
+    
+}
+int ip_homes::get_weight() const
+//获取权重
+{
+    
+}
+
+bool ip_homes::set_nowweight(int w)
+//设置当前的权重
+{
+    
+}
+
+bool ip_homes::set_des_weight()
+//权重自减
+{
+    
+}
+
+int get_nowweight() const
+//获取当前的权重
+{
+    
+}
+
+bool set_attr(book att)
+//设置服务器是否使用的标记
+{
+    
+}
+bool get_attr() const
+//获取服务器是否可以使用的状态
+{
+    
+}
+
+bool set_point(ip_homes* p)
+//设置指针尾巴
+{
+    
+}
+ip_homes* get_point() const
+//获取指针尾巴
+{
+    
+}
 fzjhs::fzjh()//负载均衡类的构造函数
 {
     //...
@@ -28,7 +96,7 @@ bool fzjh::reset()//重置ip队列
 {
     //...
 }
-(ip_homes) fzjh::get_ip()//获取此次应该选择的ip_home
+(ip_homes) fzjh::get_ip()//获取此次应该选择的ip_homes
 {
     
 }
