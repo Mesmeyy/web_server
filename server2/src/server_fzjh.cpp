@@ -21,7 +21,7 @@ ip_homes::~ip_homes()//ip_homes的析构函数
     
 }
 
-bool ip_homes::set_ip(string ip)//设置ip
+bool ip_homes::set_ip(string& ip)//设置ip
 {
     
 }
@@ -41,7 +41,7 @@ int ip_homes::get_weight() const
     
 }
 
-bool ip_homes::set_nowweight(int w)
+bool ip_homes::set_nowweight(int& w)
 //设置当前的权重
 {
     
@@ -59,7 +59,7 @@ int get_nowweight() const
     
 }
 
-bool set_attr(book att)
+bool set_attr(bool att)
 //设置服务器是否使用的标记
 {
     
@@ -70,7 +70,7 @@ bool get_attr() const
     
 }
 
-bool set_point(ip_homes* p)
+bool set_point((ip_homes*)& p)
 //设置指针尾巴
 {
     
@@ -84,11 +84,11 @@ fzjhs::fzjh()//负载均衡类的构造函数
 {
     //...
 }
-bool fzjh::addip(string ip,int weight)//添加监控ip
+bool fzjh::addip(string& ip,unsigned int& point,int& weight)//添加监控ip
 {
     //...
 }
-bool fzjh::delip(string ip)//删除无效ip
+bool fzjh::delip(string& ip)//删除无效ip
 {
     //...
 }
@@ -96,19 +96,19 @@ bool fzjh::reset()//重置ip队列
 {
     //...
 }
-(ip_homes) fzjh::get_ip()//获取此次应该选择的ip_homes
+(ip_homes*)& fzjh::get_ip()//获取此次应该选择的ip_homes
 {
     
 }
-(ip_homes) fzjh::get_ok_ips()//获取当前可用的ip队列
+(ip_homes*)& fzjh::get_ok_ips()//获取当前可用的ip队列
 {
     //...
 }
-(ip_homes) fzjh::get_bad_ips()//获取当前不可用ip的队列
+(ip_homes*)& fzjh::get_bad_ips()//获取当前不可用ip的队列
 {
     //...
 }
-int fzjh::get_ip(string ip)//获取对应ip的属性值
+int fzjh::get_ip(string& ip)//获取对应ip的属性值
 {
     //...
 }
@@ -134,7 +134,7 @@ bool fzjh::ip_weight_hash()
     //...
 }
 
-bool fzjh::set_ip_attr(string ip)//改变ip的属性
+bool fzjh::set_ip_attr(string& ip)//改变ip的属性
 {
     //...
 }
