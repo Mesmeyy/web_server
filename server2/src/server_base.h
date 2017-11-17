@@ -14,6 +14,7 @@
 #include<stdlib.h>
 #include<sys/socket.h>
 #include<sys/types.h>
+#include"server_fzjh.h"
 using namespace std;
 
 class server_base

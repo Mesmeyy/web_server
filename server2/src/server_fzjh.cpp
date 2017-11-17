@@ -31,7 +31,7 @@ string& ip_homes::get_ip() const
     
 }
 
-bool ip_homes::set_weight();//设置权重
+bool ip_homes::set_weight()//设置权重
 {
     
 }
@@ -53,34 +53,39 @@ bool ip_homes::set_des_weight()
     
 }
 
-int get_nowweight() const
+int ip_homes::get_nowweight() const
 //获取当前的权重
 {
     
 }
 
-bool set_attr(bool att)
+bool ip_homes::set_attr(bool att)
 //设置服务器是否使用的标记
 {
     
 }
-bool get_attr() const
+bool ip_homes::get_attr() const
 //获取服务器是否可以使用的状态
 {
     
 }
 
-bool set_point((ip_homes*)& p)
+
+/*
+bool ip_homes::set_point((ip_homes*) p)
 //设置指针尾巴
 {
     
 }
-ip_homes* get_point() const
+ip_homes* ip_homes::get_point() const
 //获取指针尾巴
 {
     
 }
-fzjhs::fzjh()//负载均衡类的构造函数
+*/
+
+
+fzjh::fzjh()//负载均衡类的构造函数
 {
     //...
 }
@@ -96,15 +101,15 @@ bool fzjh::reset()//重置ip队列
 {
     //...
 }
-(ip_homes*)& fzjh::get_ip()//获取此次应该选择的ip_homes
+ip_homes& fzjh::get_ip()//获取此次应该选择的ip_homes
 {
     
 }
-(ip_homes*)& fzjh::get_ok_ips()//获取当前可用的ip队列
+ip_homes& fzjh::get_ok_ips()//获取当前可用的ip队列
 {
     //...
 }
-(ip_homes*)& fzjh::get_bad_ips()//获取当前不可用ip的队列
+ip_homes& fzjh::get_bad_ips()//获取当前不可用ip的队列
 {
     //...
 }

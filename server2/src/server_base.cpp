@@ -18,6 +18,7 @@
 #include<unistd.h>
 #include<pwd.h>
 #include"server_base.h"
+#include"server_fzjh.h"
 #define Default_listen 5
 using namespace std;
 using std::string;

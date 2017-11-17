@@ -9,7 +9,8 @@
 #define _SERVER_FZJH_H
 #include <string>
 #include <iostream>
-#include <ptypes.h>
+#define Bucket_size   128
+//#include <ptypes.h>
 using namespace std;
 class ip_homes
 {
@@ -39,8 +40,8 @@ public:
     bool set_attr(bool att);//设置服务器是否使用的标记
     bool get_attr() const;//获取服务器的是否可以使用的状态
  
-    bool set_point((ip_homes*)& p);//设置尾巴指针
-    ip_homes* get_point() const;//获取尾巴指针
+    //bool set_point((ip_homes*) p);//设置尾巴指针
+    //ip_homes* get_point() const;//获取尾巴指针
 };
 
 class fzjh
@@ -51,7 +52,7 @@ private:
     ip_homes *home_now;//当前该选它作为负载均衡的服务器
     ip_homes *homw_lazy;//目前gg服务器
     ip_homes **buckets;//为以后ip hash用
-    const int buckets_default_size = 128;//一个桶的大小撑死128,里面可以有上限的ip_homes个数
+    const int buckets_default_size = Bucket_size;//一个桶的大小撑死128,里面可以有上限的ip_homes个数
     int ip_number;//ip数量
     int ip_ok_number;
     int ip_bad_number;
@@ -62,9 +63,9 @@ public:
     bool delip(string& ip);//删除旧的ip
     bool reset();//重置ip队列
     
-    (ip_homes*)& get_ip();//获取负载均衡的ip  
-    (ip_homes*)& get_ok_ips();//列出当前的可用ip和属性们
-    (ip_homes*)* get_bad_ips();//列出当前不可用的ip和属性们
+    ip_homes& get_ip();//获取负载均衡的ip  
+    ip_homes& get_ok_ips();//列出当前的可用ip和属性们
+    ip_homes& get_bad_ips();//列出当前不可用的ip和属性们
     
     int get_ip(string& ip);//获取所需要的ip属性
     int get_ok_ip_number();//获取可用ip数量
