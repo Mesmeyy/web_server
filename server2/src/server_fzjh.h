@@ -28,9 +28,9 @@ public:
     ~ip_homes();//ip_homes的析构函数
     
     bool set_ip(string& ip);//设置ip
-    string& get_ip() const;//获取ip
+    string get_ip() const;//获取ip
     
-    bool set_weight();//设置权重
+    bool set_weight(int w);//设置权重
     int get_weight() const;//获取权重
     
     bool set_nowweight(int& w);//设置当前权重

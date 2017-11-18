@@ -6,68 +6,95 @@
  ************************************************************************/
 
 #include<iostream>
+#include<cstdlib>
 #include<string>
+#include "hong.h"
 #include"server_fzjh.h"
+#define Min_port 0
+#define Max_port 65535
 using namespace std;
 using std::string;
 
 ip_homes::ip_homes()//ip_homes的构造函数
 {
     
+    ip = "";//ip初始化
+    port = Min_port + rand() % Max_port;//端口初始化为0-65535中间的一个随机值
+    
+    weight = Server_user_exhaust;//初始权重为0
+    now_weight = weight;//初始当前权重为本身权重
+
+    next = NULL;//next指针为空
+    att = false;//初始服务器不可使用
+    endpoint = NULL;//尾巴标志为NULL
 }
 
 ip_homes::~ip_homes()//ip_homes的析构函数
 {
-    
+    ip = "";
+    port = 0;
+    weight = 0;
+    now_weight = weight;
+    /*delete next;
+    next = NULL;
+    */
+
+    while(next){
+        ip_homes* af= next -> next;
+        delete next;
+        next = af;
+    }//循环释放数据
+
+    next = NULL;
+    att = false;
+    endpoint = NULL;
 }
 
 bool ip_homes::set_ip(string& ip)//设置ip
 {
-    
+    this ->  ip = ip;
+    return true;
 }
-string& ip_homes::get_ip() const
-//得到ip对应的ip
+string ip_homes::get_ip() const//得到ip对应的ip
 {
-    
-}
-
-bool ip_homes::set_weight()//设置权重
-{
-    
-}
-int ip_homes::get_weight() const
-//获取权重
-{
-    
+    return ip;
 }
 
-bool ip_homes::set_nowweight(int& w)
-//设置当前的权重
+bool ip_homes::set_weight(int w)//设置权重
 {
-    
+    weight = w;
+    return true;
+}
+int ip_homes::get_weight() const//获取权重
+{
+    return weight;
 }
 
-bool ip_homes::set_des_weight()
-//权重自减
+bool ip_homes::set_nowweight(int& w)//设置当前的权重
 {
-    
+    now_weight = w;
+    return true;
 }
 
-int ip_homes::get_nowweight() const
-//获取当前的权重
+bool ip_homes::set_des_weight()//权重自减
 {
-    
+    now_weight --;
+    return true;
 }
 
-bool ip_homes::set_attr(bool att)
-//设置服务器是否使用的标记
+int ip_homes::get_nowweight() const//获取当前的权重
 {
-    
+    return now_weight;
 }
-bool ip_homes::get_attr() const
-//获取服务器是否可以使用的状态
+
+bool ip_homes::set_attr(bool att)//设置服务器是否使用的标记
 {
-    
+    this -> att = att;
+    return true;
+}
+bool ip_homes::get_attr() const//获取服务器是否可以使用的状态
+{
+    return att;
 }
 
 
