@@ -8,6 +8,7 @@
 #include<iostream>
 #include<string>
 #include<cstdlib>
+#include<regex>
 #include<cstring>
 #include<fstream>
 #include"hong.h"
@@ -72,6 +73,7 @@ int make_server_base(server_base& bs,string filename)
     bs.confname = filename;
     unsigned int buflen = sizeof(read_buf);
     the_end_filename += filename;
+
     ifm.open(the_end_filename.c_str());
     if(ifm.is_open()){
         while(ifm.getline(read_buf,buflen)){
@@ -166,28 +168,80 @@ int read_conf(server_base& bs,char* read_buf,int flag){
         return 1;
     }
     if(temp.substr(0,9) == "rootpath "){
+        //cout << "rootpath right" << endl;
         if(flag) {
             bs.rootpath= temp.substr(9,strlen(read_buf) - 9);
         }
         return 1;
     }
+    /*
     if(temp.substr(0,5) == "agent"){
         bs.agent = 1;
         return 1;
-    }
-    if(temp.substr(0,8) == "include "){
-        if(flag) {
-            if(flag)//读文件正确就返回1
-            return 1;
-            else  return -1;
-        }
+    }*/
+    if(temp.length() == 0 ){
+        //cout << "读到了空行"<<endl;
         return 1;
     }
     if(temp.substr(0,7) == "server "){
-        //填充所管理的ip们
+        //cout << "187:temp "<<temp<<endl;
+        //cout << "server right"<<endl;
+        string ip;
+        unsigned int port;
+        int weight;
 
+        //现在要正则表达式确定ip
+        string ip_port_weight = temp.substr(7,temp.find(':',8) - 7);
+        std::regex ip_reg("^(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])");
+        std::smatch result;
+        bool valid;
+        if((valid = std::regex_match(ip_port_weight,result,ip_reg))){
+            ip = result[0];
+        }else{return -1;}
+        //ip已经确定了
+        //现在要确定port
+        //cout << "201确定了ip"<<endl;
+        ip_port_weight = temp.substr(8,temp.length());
+        int assign_posi = ip_port_weight.find(':',0);
+        //第一个:的位置
+        char cport[6];
+        memset(cport,0,sizeof(cport));
+
+        if(assign_posi == ip_port_weight.npos) port = 80;
+        else{
+            int i = 0;
+            int cport_index = 0;
+            for(i = assign_posi+1;i != ip_port_weight.length();i++){
+                if(ip_port_weight[i] == ' ') break;
+                else{
+                    cport[cport_index++] = ip_port_weight[i];
+                }
+            }
+            port = atoi(cport);
+        }
+        //port已经准备好了
+        //现在开始准备weight
+        
+        //unsigned int weight_posi = ip_port_weight.find(':',ip_port_weight.find("weight:",0));
+        size_t weight_posi = ip_port_weight.find("weight:",0);
+        if(weight_posi == ip_port_weight.npos){
+            weight = 1;
+        }else{
+            
+            string w("weight:");
+            std::regex w_reg("^(0|[1-9][0-9]*|-[1-9][0-9]*)$");
+            string wei = ip_port_weight.substr(ip_port_weight.find("weight:")+w.length(),ip_port_weight.length() - w.length());
+            std::smatch result;
+            if(std::regex_match(wei,result,w_reg)){
+                string temp = result[0];
+                weight = atoi(temp.c_str());
+            }
+            
+        }
+        //现在已经得到了weight
+        //cout << "在parajudge.cpp 229中" <<"ip = " << ip << " port = " << port << " weight =" << weight <<endl;
+            bs.servers.addip(ip,port,weight);    
         return 1;
     }
-
     return -1;
 }

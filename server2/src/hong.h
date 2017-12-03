@@ -20,4 +20,6 @@
 #define Server_default  1   //默认的R-R轮寻值
 #define Server_weight "^[1-9]\d*$" //匹配正整数
 #define Server_always -1 //新用户的链接一直给他，用到它坏
+#define Max_port 65535 //端口最大值65535
+#define Max_power 9999
 #endif
