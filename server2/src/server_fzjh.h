@@ -132,18 +132,13 @@ public:
     
     bool ip_weight_hash();//进行ip到weight的哈希
 
-    bool set_hash_weight(string& ip,unsigned int& port,int& weight);
     bool set_hash_weight(ip_homes& ipho,int& weight);
-    int get_hash_weight(string& ip,unsigned int& port);//得到指定ip的weight
     int get_hash_weight(ip_homes& ipho);
     
-    bool set_hash_nowweight(string& ip,unsigned int & port,int& nowweight);
     bool set_hash_nowweight(ip_homes& ipho,int& nowweight);
-    int get_hash_nowweight(string& ip,unsigned int& port);//得到指定ip的nowweight
     int get_hash_nowweight(ip_homes& ipho);
     
     bool set_hash_deduct_nowweight(ip_homes& ipho);//对指定的ip的nowweight进行自减操作
-    bool  set_hash_deduct_nowweight(string& ip,unsigned int& port);
     /*为什么要用hash，假设服务器必须要往一个有特定功能的服务器上发送请求，也就是服务器维护者很多目标服务器的状态，ip_weight _hash能告诉服务器当前目标的那个特定功能的服务器可不可能接受你这个请求，这个目标服务器是否处于压力状态。那么我需要的是根据ip和端口找当前权重的。*/
 
 };
