@@ -90,12 +90,12 @@ int main(int argc,char *argv[])
     cout << t.get_nowweight()<<endl;
     cout << bs.servers.home_use[0].get_nowweight() << endl;
     */
-    /*
+    
     if(bs.servers.ip_weight_hash()){
         cout << "服务器启动ip_weight哈希成功"<<endl;
     }else{
         cout << "服务器启动ip_weight哈希失败，程序中段..."<<endl;
         return 0;
-    }*/
+    }
 
 }

@@ -149,11 +149,9 @@ bool fzjh::addip(string& ip,unsigned int& port,int& weight)//添加监控ip
     
     //开始检查ipho的weight，看放入home_lazy还是home_use。
     if((ipho.get_weight() == Server_use_bad) || (ipho.get_weight() == Server_bad_attr)){
-        //ipho.inde = home_lazy_number;
         home_lazy.push_back(ipho);
         home_lazy_number++;
     }else {
-        //ipho.inde = home_use_number;
         home_use.push_back(ipho);
         home_use_number++;
     }
@@ -178,10 +176,10 @@ bool fzjh::delip(ip_homes& ipho)
         }else ++it;
     }
     //***********************************是要把hash中的ip_home也改变属性的
-    /*
+    //要想删除ipho，那这个肯定是被用坏的 
     int tempweight = Server_use_bad;
-    set_hash_weight(*it,tempweight);
-   */
+    set_hash_weight(ipho,tempweight);
+   
 }
 bool fzjh::reset()//重置ip队列
 {
@@ -230,6 +228,7 @@ ip_homes& fzjh::get_turn_ip(unsigned int turn)
         home_use[turn].set_deduct_nowweight();
         if(turn == home_use_number - 1) over = true;
         else over = false;
+        //hash buckets中的nowweight不用更改，因为buckets中nowweight没有意义。你想，我要是有ip_weight，肯定是用户指定了ip，这样就不涉及轮寻，而nowweight是为了轮寻设计的
         //***************************8要改变ip_hash中对应的ip_home
         //set_hash_deduct_nowweight(home_use[turn]);
         ip_homes &temp = (home_use[turn]);
@@ -359,6 +358,7 @@ bool fzjh::set_hash_weight(ip_homes& tempiphome,int& weight)
             if(it -> get_port() == tempiphome.get_port()){
                 it -> set_weight(weight);
                 //注意这里的更改不会造成home*中对应ip_homes的weight更改
+                //这个函数设计之初是一是为了让delip函数调用，加入有用户指定这个ip,经过connect之后这个ip的weight坏掉了，那么后来的负载均衡客户在home_use中使用，也会被目标服务器挂掉，由此以来，home_use和buckets就同步了
                 return true;
             }else continue;
         }
